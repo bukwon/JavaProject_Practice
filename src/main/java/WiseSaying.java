@@ -1,6 +1,17 @@
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
 public class WiseSaying {
+    @Getter
+    @Setter
     String content;
+    @Getter
+    @Setter
     String author;
+    @Getter
+    @Setter
     int id;
 
     public WiseSaying() {
