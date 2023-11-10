@@ -1,6 +1,3 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,8 +6,6 @@ public class Controller {
     public List<WiseSaying> list;
     private String menu;
     public int id = 0;
-    private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
     private FileController file = new FileController();
     private JsonFileController json = new JsonFileController();
 
@@ -36,6 +31,10 @@ public class Controller {
                     return;
                 case 1:
                     addList();
+                    break;
+                case 2:
+                    checkList();
+                    break;
             }
         }
     }
@@ -44,6 +43,7 @@ public class Controller {
         int menuNum = 0;
         if (menu.equals("종료")) menuNum = 0;
         else if (menu.equals("등록")) menuNum = 1;
+        else if (menu.equals("목록")) menuNum = 2;
 
         return menuNum;
     }
@@ -59,5 +59,19 @@ public class Controller {
         file.saveToTextFile(list);
         json.saveToJsonFile(list);      // 명언을 파일과 json에 저장
     }
-}
 
+    void checkList() {
+        System.out.println("번호 \t / \t 작가 \t / \t 명언");
+        int printLength = json.loadFromJsonFile().size();
+        try{
+//            System.out.println(objectMapper.readValue(new File("data.json"), new TypeReference<List<WiseSaying>>() {}));
+            for (int i = 0; i < printLength; i++) {
+                System.out.println(json.loadFromJsonFile().get(i).id + "\t\t" +
+                        json.loadFromJsonFile().get(i).author + "\t" +
+                        json.loadFromJsonFile().get(i).content);
+            }
+        } catch (Exception e) {
+            System.out.println("목록 출력 에러!");
+        }
+    }
+}
