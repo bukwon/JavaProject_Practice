@@ -40,7 +40,8 @@ class FileController {
 class JsonFileController {
     private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
-    JsonFileController() {}
+    JsonFileController() {
+    }
 
     void saveToJsonFile(List<WiseSaying> list) {
         try (PrintWriter writer = new PrintWriter(new FileWriter("data.json"))) {
@@ -52,7 +53,7 @@ class JsonFileController {
     }
 
     List<WiseSaying> loadFromJsonFile() {
-        List<WiseSaying> loadedList = new ArrayList<>();
+        List<WiseSaying> loadedList = new ArrayList<>();;
         try (BufferedReader reader = new BufferedReader(new FileReader("data.json"))) {
             StringBuilder json = new StringBuilder();
             String line;

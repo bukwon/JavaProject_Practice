@@ -6,6 +6,7 @@ public class Controller {
     public List<WiseSaying> list;
     private String menu;
     public int id = 0;
+    int pasteId;
     private FileController file = new FileController();
     private JsonFileController json = new JsonFileController();
 
@@ -24,7 +25,7 @@ public class Controller {
             System.out.print("명령) ");
             menu = sc.nextLine();
 
-            switch (menuList(menu)) {
+            switch (divideWord(menu)) {
                 case 0:
                     file.saveToTextFile(list);
                     json.saveToJsonFile(list);
@@ -35,6 +36,9 @@ public class Controller {
                 case 2:
                     checkList();
                     break;
+                case 3:
+                    removeList();
+                    break;
             }
         }
     }
@@ -44,6 +48,7 @@ public class Controller {
         if (menu.equals("종료")) menuNum = 0;
         else if (menu.equals("등록")) menuNum = 1;
         else if (menu.equals("목록")) menuNum = 2;
+        else if (menu.equals("삭제")) menuNum = 3;
 
         return menuNum;
     }
@@ -63,7 +68,7 @@ public class Controller {
     void checkList() {
         System.out.println("번호 \t / \t 작가 \t / \t 명언");
         int printLength = json.loadFromJsonFile().size();
-        try{
+        try {
 //            System.out.println(objectMapper.readValue(new File("data.json"), new TypeReference<List<WiseSaying>>() {}));
             for (int i = 0; i < printLength; i++) {
                 System.out.println(json.loadFromJsonFile().get(i).id + "\t\t" +
@@ -74,4 +79,32 @@ public class Controller {
             System.out.println("목록 출력 에러!");
         }
     }
-}
+
+    void removeList() {
+        List<WiseSaying> jsonList = json.loadFromJsonFile();
+
+        // 삭제할 id와 일치하는 명언을 찾아서 제거
+       boolean remove = jsonList.removeIf(saying -> saying.getId() == pasteId);
+
+       if (remove) {
+           for (int i = pasteId; i < jsonList.size(); i++) {
+               jsonList.get(i).id--;
+           }
+           // 파일에 저장
+           json.saveToJsonFile(jsonList);
+           System.out.println(pasteId + "번 명언이 삭제되었습니다.");
+       }
+       else System.out.println(pasteId + "번 명언은 존재하지 않습니다.");
+    }
+
+        int divideWord (String menu){
+            int divideWord = 0;
+            if (menu.contains("?")) {                           // 수정 및 삭제 입력 시 입장
+                String[] s1 = menu.split("\\?");        // 1차 분할 (메뉴 기능 & id)
+                String[] s2 = s1[1].split("=");         // 2차 분할 (id & id 번호)
+                this.pasteId = Integer.parseInt(s2[1]);      // String형 숫자를 정수로 변환 (삭제 및 수정 시 이용)
+                divideWord = menuList(s1[0]);
+            } else divideWord = menuList(menu);            // 수정 및 삭제 외 입장
+            return divideWord;
+        }           // 메뉴 문자 나누기
+    }
