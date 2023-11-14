@@ -1,9 +1,13 @@
 [ {
-  "content" : "나의 죽음을 적에게 알리지 마라",
-  "author" : "이순신",
+  "content" : "2번 테스트",
+  "author" : "2번",
   "id" : 1
 }, {
-  "content" : "죽기 딱 좋은 날씨네",
-  "author" : "이중구",
+  "content" : "3번 테스트",
+  "author" : "3번",
   "id" : 2
+}, {
+  "content" : "4번 테스트",
+  "author" : "4번",
+  "id" : 3
 } ]
